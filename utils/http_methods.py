@@ -5,7 +5,6 @@ import requests
 class HttpMethods:
     # Заголовки по умолчанию для всех запросов (указываем, что данные передаются в формате JSON)
     headers = {'Content-type': 'application/json'}
-
     # Куки, которые могут использоваться в запросах (изначально пустые)
     cookie = ''
 
@@ -16,6 +15,7 @@ class HttpMethods:
         result = requests.get(url, headers=HttpMethods.headers, cookies=HttpMethods.cookie)
         return result
 
+
     # Статический метод для выполнения POST-запроса
     @staticmethod
     def post(url, body):
@@ -23,12 +23,14 @@ class HttpMethods:
         result = requests.post(url, json=body, headers=HttpMethods.headers, cookies=HttpMethods.cookie)
         return result
 
+
     # Статический метод для выполнения PUT-запроса
     @staticmethod
     def put(url, body):
         # Выполняем PUT-запрос по указанному URL с телом запроса в формате JSON, заголовками и куками
         result = requests.put(url, json=body, headers=HttpMethods.headers, cookies=HttpMethods.cookie)
         return result
+
 
     # Статический метод для выполнения DELETE-запроса
     @staticmethod
