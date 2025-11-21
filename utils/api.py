@@ -1,5 +1,6 @@
 from utils.http_methods import HttpMethods  # Импортируем класс HttpMethods.
 
+
 base_url = 'https://rahulshettyacademy.com'  # Базовый URL API.
 key = '?qaclick123'  # Ключ для доступа к API.
 
