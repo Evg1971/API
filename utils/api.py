@@ -1,13 +1,12 @@
 from utils.http_methods import HttpMethods  # Импортируем класс HttpMethods для выполнения HTTP-запросов.
 
 
-# Базовый URL API, к которому будут отправляться запросы.
-base_url = 'https://rahulshettyacademy.com'
-
-# Ключ для доступа к API, добавляется к запросам в качестве параметра.
-key = '?qaclick123'
-
 class GoogleMapsApi:
+    # Базовый URL API, к которому будут отправляться запросы.
+    base_url = 'https://rahulshettyacademy.com'
+    # Ключ для доступа к API, добавляется к запросам в качестве параметра.
+    key = '?qaclick123'
+
     @staticmethod
     def create_new_place():
         # JSON-объект с данными, необходимыми для создания нового места.
@@ -33,7 +32,7 @@ class GoogleMapsApi:
         post_resource = '/maps/api/place/add/json'
 
         # Формируем полный URL для POST-запроса, объединяя базовый URL, ресурсный путь и ключ.
-        post_url = base_url + post_resource + key
+        post_url = GoogleMapsApi.base_url + post_resource + GoogleMapsApi.key
 
         # Выводим сформированный URL для отладки.
         print(post_url)
@@ -53,7 +52,7 @@ class GoogleMapsApi:
         get_resource = '/maps/api/place/get/json'
 
         # Формируем полный URL для GET-запроса, добавляя place_id в качестве параметра.
-        get_url = base_url + get_resource + key + '&place_id=' + place_id
+        get_url = GoogleMapsApi.base_url + get_resource + GoogleMapsApi.key + '&place_id=' + place_id
 
         # Выводим сформированный URL для отладки.
         print(get_url)
