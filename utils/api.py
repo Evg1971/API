@@ -7,7 +7,7 @@ class GoogleMapsApi:
     base_url = 'https://rahulshettyacademy.com'
 
     # Ключ API, который добавляется к каждому запросу в качестве параметра.
-    key = '?qaclick123'
+    key = '?key=qaclick123'
 
     @staticmethod
     def create_new_place():
@@ -101,3 +101,33 @@ class GoogleMapsApi:
 
         # Возвращаем результат PUT-запроса.
         return result_put
+
+    @staticmethod
+    def delete_new_place(place_id):
+        """ Метод для удаления места по его идентификатору.
+        Возвращает результат DELETE-запроса. """
+
+        # Ресурсный путь для DELETE-запроса
+        delete_resource = '/maps/api/place/delete/json'
+
+        # Формируем полный URL для DELETE-запроса
+        delete_url = GoogleMapsApi.base_url + delete_resource + GoogleMapsApi.key
+
+        # Выводим сформированный URL для отладки.
+        print(f"DELETE URL: {delete_url}")
+
+        # JSON-объект с данными для удаления места.
+        # Содержит идентификатор места, который нужно удалить.
+        json_for_delete_new_location = {
+            "place_id": place_id
+        }
+
+        # Выполняем DELETE-запрос для удаления места.
+        # Передаем сформированный URL и JSON-объект с идентификатором места.
+        result_delete = HttpMethods.delete(delete_url, json_for_delete_new_location)
+
+        # Выводим текст ответа от сервера для отладки.
+        print(f"DELETE Response: {result_delete.text}")
+
+        # Возвращаем результат DELETE-запроса.
+        return result_delete
