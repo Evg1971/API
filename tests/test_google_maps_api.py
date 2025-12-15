@@ -29,6 +29,9 @@ class TestCreatePlace:
         place_id = check_post.get('place_id')
         print(f"Создан place_id: {place_id}")  # Вывод place_id для отладки.
 
+        # Проверка структуры JSON-ответа POST.
+        Checking.check_json_token(result_post, ['status', 'place_id', 'scope', 'reference', 'id'])
+
         # Начало тестирования метода GET для проверки созданного места.
         print('Начало тестирования метода GET POST')
 
@@ -37,6 +40,9 @@ class TestCreatePlace:
 
         # Проверка, что статус-код ответа равен 200 (OK).
         Checking.check_status_code(result_get, 200)
+
+        # Проверка структуры JSON-ответа GET.
+        Checking.check_json_token(result_get, ['location', 'accuracy', 'name', 'phone_number', 'address', 'types', 'website', 'language'])
 
         # Начало тестирования метода PUT для обновления информации о месте.
         print('Начало тестирования метода PUT')
@@ -47,6 +53,9 @@ class TestCreatePlace:
         # Проверка, что статус-код ответа равен 200 (OK).
         Checking.check_status_code(result_put, 200)
 
+        # Проверка структуры JSON-ответа PUT.
+        Checking.check_json_token(result_put, ['msg'])
+
         # Повторный вызов метода GET для проверки обновлённой информации о месте.
         print('Метод GET PUT')
         result_get: Response = GoogleMapsApi.get_new_place(place_id)
@@ -54,8 +63,10 @@ class TestCreatePlace:
         # Проверка, что статус-код ответа равен 200 (OK).
         Checking.check_status_code(result_get, 200)
 
-        # Вывод сообщения об успешном завершении теста.
-        print('Тест завершен успешно')
+        # Проверка структуры JSON-ответа GET.
+        Checking.check_json_token(result_get,
+                                  ['location', 'accuracy', 'name', 'phone_number', 'address', 'types', 'website',
+                                   'language'])
 
         # Вывод сообщения о начале тестирования метода DELETE.
         print('Начало тестирования метода DELETE')
@@ -65,6 +76,9 @@ class TestCreatePlace:
 
         # Проверка, что статус-код ответа равен 200 (OK).
         Checking.check_status_code(result_delete, 200)
+
+        # Проверка структуры JSON-ответа DELETE.
+        Checking.check_json_token(result_delete, ['status'])
 
         # Преобразование ответа DELETE-запроса в JSON-формат для извлечения данных.
         check_delete = result_delete.json()
@@ -88,6 +102,9 @@ class TestCreatePlace:
         # Проверка, что статус-код ответа равен 404.
         Checking.check_status_code(result_get, 404)
 
+        # Проверка структуры JSON-ответа GET.
+        Checking.check_json_token(result_get, ['msg'])
+
         # Преобразование ответа GET-запроса в JSON-формат для извлечения данных.
         check_get = result_get.json()
 
@@ -101,4 +118,5 @@ class TestCreatePlace:
         print('Проверка удаления места прошла успешно')
 
         # Вывод сообщения об успешном завершении теста.
-        print('Тест завершен успешно')
+        print('Тестирование создания, изменения и удаления новой локации прошло'
+              ' успешно')
