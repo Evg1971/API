@@ -2,13 +2,15 @@
 from requests import Response
 # Импортируем класс GoogleMapsApi из модуля utils.api для работы с API Google Maps.
 from utils.api import GoogleMapsApi
+# Импортируем класс Checking из модуля utils.checking для проверки статус-кодов ответов.
+from utils.checking import Checking
 
 
 class TestCreatePlace:
     @staticmethod
     def test_create_new_place():
         """ Тест для проверки создания нового места через API.
-        Проверяет статус-коды POST, GET и PUT запросов,
+        Проверяет статус-коды POST, GET, PUT и DELETE запросов,
         а также корректность создания и обновления места. """
         # Начало тестирования метода POST: вывод сообщения о начале теста.
         print('Начало тестирования метода POST')
@@ -17,10 +19,8 @@ class TestCreatePlace:
         # Результат POST-запроса сохраняется в переменной result_post.
         result_post: Response = GoogleMapsApi.create_new_place()
 
-        # Проверка статус-кода ответа POST-запроса.
-        # Ожидается статус-код 200 (успешный запрос).
-        assert result_post.status_code == 200, f"Неожиданный статус-код: {result_post.status_code}"
-        print('Статус-код POST запроса корректен')
+        # Проверка, что статус-код ответа равен 200 (OK).
+        Checking.check_status_code(result_post, 200)
 
         # Преобразование ответа POST-запроса в JSON-формат для извлечения данных.
         check_post = result_post.json()
@@ -35,9 +35,8 @@ class TestCreatePlace:
         # Вызов метода получения информации о месте по place_id.
         result_get: Response = GoogleMapsApi.get_new_place(place_id)
 
-        # Проверка статус-кода ответа GET-запроса.
-        assert result_get.status_code == 200, f"Неожиданный статус-код: {result_get.status_code}"
-        print('Статус-код GET запроса корректен')
+        # Проверка, что статус-код ответа равен 200 (OK).
+        Checking.check_status_code(result_get, 200)
 
         # Начало тестирования метода PUT для обновления информации о месте.
         print('Начало тестирования метода PUT')
@@ -45,17 +44,15 @@ class TestCreatePlace:
         # Вызов метода обновления информации о месте по place_id.
         result_put: Response = GoogleMapsApi.put_new_place(place_id)
 
-        # Проверка статус-кода ответа PUT-запроса.
-        assert result_put.status_code == 200, f"Неожиданный статус-код: {result_put.status_code}"
-        print('Статус-код PUT запроса корректен')
+        # Проверка, что статус-код ответа равен 200 (OK).
+        Checking.check_status_code(result_put, 200)
 
         # Повторный вызов метода GET для проверки обновлённой информации о месте.
         print('Метод GET PUT')
         result_get: Response = GoogleMapsApi.get_new_place(place_id)
 
-        # Проверка статус-кода ответа повторного GET-запроса.
-        assert result_get.status_code == 200, f"Неожиданный статус-код: {result_get.status_code}"
-        print('Статус-код GET PUT запроса корректен')
+        # Проверка, что статус-код ответа равен 200 (OK).
+        Checking.check_status_code(result_get, 200)
 
         # Вывод сообщения об успешном завершении теста.
         print('Тест завершен успешно')
@@ -66,10 +63,8 @@ class TestCreatePlace:
         # Вызов метода удаления места по его идентификатору.
         result_delete: Response = GoogleMapsApi.delete_new_place(place_id)
 
-        # Проверка статус-кода ответа DELETE-запроса.
-        # Ожидается статус-код 200, что означает успешное выполнение запроса.
-        assert result_delete.status_code == 200, f"Неожиданный статус-код: {result_delete.status_code}"
-        print("Статус-код DELETE корректен")
+        # Проверка, что статус-код ответа равен 200 (OK).
+        Checking.check_status_code(result_delete, 200)
 
         # Преобразование ответа DELETE-запроса в JSON-формат для извлечения данных.
         check_delete = result_delete.json()
@@ -84,16 +79,14 @@ class TestCreatePlace:
         # Вывод сообщения об успешной проверке статус-кода и статуса DELETE-запроса.
         print('Статус-код DELETE запроса корректен, место успешно удалено')
 
-        # Вывод сообщения о начале проверки метода GET после удаления.
-        print('Метод GET DELETE')
+        # --- Тестирование метода GET после DELETE ---
+        print('Тестирование метода GET (после DELETE)')
 
         # Вызов метода получения информации о месте по place_id после удаления.
         result_get: Response = GoogleMapsApi.get_new_place(place_id)
 
-        # Проверка статус-кода ответа GET-запроса после удаления.
-        # Ожидается статус-код 404, что означает, что место с данным place_id не найдено.
-        assert result_get.status_code == 404, f"Неожиданный статус-код: {result_get.status_code}"
-        print('Статус-код GET DELETE корректен')
+        # Проверка, что статус-код ответа равен 404.
+        Checking.check_status_code(result_get, 404)
 
         # Преобразование ответа GET-запроса в JSON-формат для извлечения данных.
         check_get = result_get.json()
