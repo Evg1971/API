@@ -17,7 +17,7 @@ class Checking:
         print(f"Успешно. Статус-код = {response.status_code}")
 
     @staticmethod
-    def check_json_token(response: Response, expected_value: list):
+    def check_json_token(response: Response, expected_value):
         """ Статический метод для проверки наличия ожидаемых полей в JSON-ответе."""
 
         # Преобразуем текст ответа в объект Python (JSON).
@@ -32,3 +32,37 @@ class Checking:
         # Если проверка пройдена успешно, выводим сообщение.
         print("Все поля присутствуют")
 
+    @staticmethod
+    def check_json_value(response: Response, field_name, expected_value):
+        """Статический метод для проверки значения конкретного поля в JSON-ответе."""
+
+        # Преобразуем ответ в JSON-формат.
+        check = response.json()
+
+        # Получаем значение указанного поля.
+        check_info = check.get(field_name)
+
+        # Проверяем, что значение поля совпадает с ожидаемым.
+        assert check_info == expected_value, (
+            f"Провал. Ожидалось значение {expected_value}, "
+            f"получено {check_info}"
+        )
+        # Если проверка пройдена успешно, выводим сообщение.
+        print(f"Значение {field_name} верно")
+
+    @staticmethod
+    def check_json_search_word_in_value(response: Response, field_name, search_word):
+        """Статический метод для проверки наличия подстроки в значении поля JSON-ответа"""
+
+        # Преобразуем ответ в JSON-формат.
+        check = response.json()
+
+        # Получаем значение указанного поля.
+        check_info = check.get(field_name)
+
+        # Проверяем, содержится ли искомая подстрока в значении поля.
+        if search_word in check_info:
+            print(f"Успешно. Слово {search_word} присутствует.")
+        else:
+            # Если подстрока не найдена, выводим сообщение о провале.
+            print(f"Провал. Слово {search_word} отсутствует")

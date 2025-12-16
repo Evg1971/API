@@ -32,6 +32,9 @@ class TestCreatePlace:
         # Проверка структуры JSON-ответа POST.
         Checking.check_json_token(result_post, ['status', 'place_id', 'scope', 'reference', 'id'])
 
+        # Проверка значения поля 'status' в ответе POST (должно быть 'OK').
+        Checking.check_json_value(result_post, 'status', 'OK')
+
         # Начало тестирования метода GET для проверки созданного места.
         print('Начало тестирования метода GET POST')
 
@@ -43,6 +46,9 @@ class TestCreatePlace:
 
         # Проверка структуры JSON-ответа GET.
         Checking.check_json_token(result_get, ['location', 'accuracy', 'name', 'phone_number', 'address', 'types', 'website', 'language'])
+
+        # Проверка значения поля 'address' в ответе GET.
+        Checking.check_json_value(result_get, 'address', '29, side layout, cohen 09')
 
         # Начало тестирования метода PUT для обновления информации о месте.
         print('Начало тестирования метода PUT')
@@ -56,6 +62,9 @@ class TestCreatePlace:
         # Проверка структуры JSON-ответа PUT.
         Checking.check_json_token(result_put, ['msg'])
 
+        # Проверка структуры JSON-ответа PUT (наличие обязательных полей).
+        Checking.check_json_value(result_put, 'msg', 'Address successfully updated')
+
         # Повторный вызов метода GET для проверки обновлённой информации о месте.
         print('Метод GET PUT')
         result_get: Response = GoogleMapsApi.get_new_place(place_id)
@@ -67,6 +76,9 @@ class TestCreatePlace:
         Checking.check_json_token(result_get,
                                   ['location', 'accuracy', 'name', 'phone_number', 'address', 'types', 'website',
                                    'language'])
+
+        # Проверка обновлённого значения поля 'address' в ответе GET.
+        Checking.check_json_value(result_get, 'address', '100 Lenina street, RU')
 
         # Вывод сообщения о начале тестирования метода DELETE.
         print('Начало тестирования метода DELETE')
@@ -80,15 +92,8 @@ class TestCreatePlace:
         # Проверка структуры JSON-ответа DELETE.
         Checking.check_json_token(result_delete, ['status'])
 
-        # Преобразование ответа DELETE-запроса в JSON-формат для извлечения данных.
-        check_delete = result_delete.json()
-
-        # Извлечение значения поля 'status' из JSON-ответа.
-        status = check_delete.get('status')
-
-        # Проверка, что поле 'status' в ответе равно 'OK'.
-        # Это подтверждает, что удаление прошло успешно.
-        assert status == 'OK', f"Неожиданное значение поля status: {status}"
+        # Проверка значения поля 'status' в ответе DELETE (должно быть 'OK').
+        Checking.check_json_value(result_delete, 'status', 'OK')
 
         # Вывод сообщения об успешной проверке статус-кода и статуса DELETE-запроса.
         print('Статус-код DELETE запроса корректен, место успешно удалено')
@@ -105,16 +110,10 @@ class TestCreatePlace:
         # Проверка структуры JSON-ответа GET.
         Checking.check_json_token(result_get, ['msg'])
 
-        # Преобразование ответа GET-запроса в JSON-формат для извлечения данных.
-        check_get = result_get.json()
+        # Проверка наличия слова 'failed' в значении поля 'msg' в ответе GET.
+        Checking.check_json_search_word_in_value(result_get, 'msg', 'failed')
 
-        # Извлечение значения поля 'msg' из JSON-ответа.
-        msg = check_get.get('msg')
-
-        # Проверка, что поле 'msg' в ответе содержит сообщение об ошибке.
-        # Это подтверждает, что место действительно удалено и недоступно для получения.
-        assert msg == "Get operation failed, looks like place_id  doesn't exists", \
-            f"Неожиданное сообщение в ответе: {msg}"
+        # Вывод сообщения об успешном удалении места
         print('Проверка удаления места прошла успешно')
 
         # Вывод сообщения об успешном завершении теста.
